@@ -24,4 +24,9 @@ export class UserService {
     delete user.password;
     return user;
   }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await this.userRepository.findOneBy({ email });
+    return user;
+  }
 }
