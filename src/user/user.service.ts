@@ -29,4 +29,18 @@ export class UserService {
     const user = await this.userRepository.findOneBy({ email });
     return user;
   }
+
+  async getAll() {
+    const users = await this.userRepository.find({
+      select: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'createdAt',
+        'updatedAt',
+      ],
+    });
+    return users;
+  }
 }
