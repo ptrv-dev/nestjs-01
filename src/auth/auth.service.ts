@@ -32,7 +32,7 @@ export class AuthService {
     return token;
   }
 
-  private async generateToken(user: User): Promise<string> {
+  async generateToken(user: User): Promise<string> {
     const payload = {
       id: user.id,
       email: user.email,
