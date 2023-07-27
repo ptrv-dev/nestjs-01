@@ -11,13 +11,18 @@ export class UploadService {
     private dataSource: DataSource,
   ) {}
 
-  async create(dto: CreateFileDto) {
+  async getAll(): Promise<File[]> {
+    const files = await this.fileRepository.find();
+    return files;
+  }
+
+  async create(dto: CreateFileDto): Promise<File> {
     const file = this.fileRepository.create(dto);
     await this.fileRepository.save(file);
     return file;
   }
 
-  async createMany(dto: Array<CreateFileDto>) {
+  async createMany(dto: Array<CreateFileDto>): Promise<File[]> {
     const transaction = this.dataSource.createQueryRunner();
 
     await transaction.connect();

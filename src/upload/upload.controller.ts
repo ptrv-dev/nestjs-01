@@ -1,7 +1,10 @@
 import {
   BadRequestException,
   Controller,
+  Get,
+  Param,
   Post,
+  Res,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -9,11 +12,25 @@ import {
 import { UploadService } from './upload.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { join, extname } from 'path';
+import { Response } from 'express';
+import { createReadStream } from 'fs';
 
-@Controller('upload')
+@Controller('uploads')
 export class UploadController {
   constructor(private uploadService: UploadService) {}
+
+  @Get()
+  async getAll() {
+    const files = await this.uploadService.getAll();
+    return files;
+  }
+
+  @Get(':name')
+  async getFileByName(@Param('name') name: string, @Res() res: Response) {
+    const stream = createReadStream(join(process.cwd(), 'uploads', name));
+    stream.pipe(res);
+  }
 
   @UseInterceptors(
     FileInterceptor('file', {
